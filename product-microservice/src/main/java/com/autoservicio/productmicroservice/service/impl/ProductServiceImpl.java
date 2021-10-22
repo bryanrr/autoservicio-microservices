@@ -1,8 +1,10 @@
 package com.autoservicio.productmicroservice.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.autoservicio.productmicroservice.dto.Product;
@@ -20,5 +22,19 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Product>product=productRepository.findById(id.toUpperCase());
 		
 		return product.isPresent()?product.get():new Product();
+	}
+	
+	@Override
+	public List<Product>getProductCoincidences(String coincidences){
+		String[]words=coincidences.split(" ");
+		String regexp="[\\w]*";
+		
+		for(String word:words) {
+			regexp+=word+"[\\w\\s]*";
+		}
+		
+		Sort sort=Sort.by(Sort.Direction.ASC, "description");
+		
+		return productRepository.findCoincidences(regexp,sort);
 	}
 }

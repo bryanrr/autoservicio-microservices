@@ -1,9 +1,15 @@
 package com.autoservicio.productmicroservice.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
+import com.autoservicio.productmicroservice.converter.BsonTimestampToDateConverter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -17,6 +23,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration{
 	private String host;
 	@Value("${mongo.port}")
 	private String port;
+	
+	private final List<Converter<?, ?>> converters = new ArrayList<Converter<?, ?>>();
 
 	@Override
 	protected MongoClient createMongoClient(MongoClientSettings settings) {
@@ -28,6 +36,13 @@ public class MongoConfig extends AbstractMongoClientConfiguration{
 	@Override
 	protected String getDatabaseName() {
 		return database;
+	}
+
+	@Override
+	public MongoCustomConversions customConversions() {
+		converters.add(new BsonTimestampToDateConverter());
+        
+        return new MongoCustomConversions(converters);
 	}
 
 }

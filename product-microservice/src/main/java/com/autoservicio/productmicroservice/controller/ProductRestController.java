@@ -1,5 +1,7 @@
 package com.autoservicio.productmicroservice.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,5 +20,10 @@ public class ProductRestController {
 	@RequestMapping(value="/product/{id}", method=RequestMethod.GET)
 	public Product getProductById(@PathVariable("id") String id) {
 		return productService.getProductById(id);
+	}
+	
+	@RequestMapping(value="/product/coincidences/{coincidences}", method=RequestMethod.GET)
+	List<Product> getProductsByCoincidences(@PathVariable("coincidences")String coincidences){
+		return productService.getProductCoincidences(coincidences);
 	}
 }
