@@ -2,11 +2,10 @@ package com.autoservicio.autoserviciogateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
+@EnableZuulProxy
 @EnableEurekaClient
 @SpringBootApplication
 public class AutoservicioGatewayApplication {
@@ -15,9 +14,4 @@ public class AutoservicioGatewayApplication {
 		SpringApplication.run(AutoservicioGatewayApplication.class, args);
 	}
 	
-	@Bean
-	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-		return builder.routes().route("product-service", r -> r.path("/product/**")
-	            .uri("lb://product")).build();
-	}
 }
